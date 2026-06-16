@@ -38,7 +38,7 @@ jobs:
             git clone https://github.com/FFreezed/dummy-static-web .
             
             # 5. Build and launch the container stack in the background
-            docker-compose up --build -d
+            sudo docker-compose up --build -d
             
             # 6. Frugal Ops Clean up: Delete old unused images to save that 8GB disk space
-            docker system prune -f
+            sudo docker system prune -f
