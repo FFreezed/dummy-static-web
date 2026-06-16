@@ -1,0 +1,44 @@
+name: Automated Multi-Container Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Download the code from GitHub's servers onto the runner
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      # SSH into your EC2 Instance and execute commands
+      - name: Deploy Stack to AWS EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            # 1. Create a project directory if it doesn't exist
+            mkdir -p ~/web-app
+            
+            # 2. Navigate to the project directory
+            cd ~/web-app
+            
+            # 3. Clean up the old repository files to prevent git conflicts
+            rm -rf * .git .github
+            
+            # 4. Clone your repository directly onto the server 
+            # Note: For a public repo, use standard HTTPS clone. 
+            # Replace 'your-username/your-repo-name' with your actual repository path
+            git clone https://github.com/FFreezed/dummy-static-web .
+            
+            # 5. Build and launch the container stack in the background
+            docker-compose up --build -d
+            
+            # 6. Frugal Ops Clean up: Delete old unused images to save that 8GB disk space
+            docker system prune -f
