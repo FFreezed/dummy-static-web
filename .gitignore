@@ -1,0 +1,25 @@
+# === Operating System & IDE Clutter ===
+.DS_Store
+Thumbs.db
+.vscode/
+*.swp
+
+# === Security & Keys (CRITICAL) ===
+*.pem
+*.key
+*.id_rsa
+secrets.txt
+.env
+*.env.*
+
+# === Terraform Local States & Caches ===
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+*.tfvars
+*.tfvars.json
+
+# === Ansible Temp Files ===
+*.retry
+.ansible/
